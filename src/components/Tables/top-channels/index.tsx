@@ -9,10 +9,12 @@ import {
 import { compactFormat, standardFormat } from "@/lib/format-number";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { getTopChannels } from "../fetch";
+import { getEmployees } from "../fetch";
+import { DownloadIcon, PreviewIcon } from "../icons";
+import { TrashIcon } from "@/assets/icons";
 
-export async function TopChannels({ className }: { className?: string }) {
-  const data = await getTopChannels();
+export async function Employees({ className }: { className?: string }) {
+  const data = await getEmployees();
 
   return (
     <div
@@ -22,17 +24,18 @@ export async function TopChannels({ className }: { className?: string }) {
       )}
     >
       <h2 className="mb-4 text-body-2xlg font-bold text-dark dark:text-white">
-        Top Channels
+        Employees
       </h2>
 
       <Table>
         <TableHeader>
           <TableRow className="border-none uppercase [&>th]:text-center">
-            <TableHead className="min-w-[120px] !text-left">Source</TableHead>
-            <TableHead>Visitors</TableHead>
-            <TableHead className="!text-right">Revenues</TableHead>
-            <TableHead>Sales</TableHead>
-            <TableHead>Conversion</TableHead>
+            <TableHead className="min-w-[120px] !text-left">Id</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead className="!text-right">Email</TableHead>
+            <TableHead>Phone</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -43,26 +46,35 @@ export async function TopChannels({ className }: { className?: string }) {
               key={channel.name + i}
             >
               <TableCell className="flex min-w-fit items-center gap-3">
-                <Image
-                  src={channel.logo}
-                  className="size-8 rounded-full object-cover"
-                  width={40}
-                  height={40}
-                  alt={channel.name + " Logo"}
-                  role="presentation"
-                />
+                
                 <div className="">{channel.name}</div>
               </TableCell>
 
-              <TableCell>{compactFormat(channel.visitors)}</TableCell>
+              <TableCell>{channel.email}</TableCell>
 
               <TableCell className="!text-right text-green-light-1">
-                ${standardFormat(channel.revenues)}
+                {channel.phone}
               </TableCell>
 
-              <TableCell>{channel.sales}</TableCell>
+              <TableCell>{channel.is_active}</TableCell>
 
-              <TableCell>{channel.conversion}%</TableCell>
+              <TableCell>{channel.is_active}</TableCell>
+              <TableCell> <div className="flex items-center justify-end gap-x-3.5">
+                                <button className="hover:text-primary">
+                                  <span className="sr-only">View Invoice</span>
+                                  <PreviewIcon />
+                                </button>
+              
+                                <button className="hover:text-primary">
+                                  <span className="sr-only">Delete Invoice</span>
+                                  <TrashIcon />
+                                </button>
+              
+                                <button className="hover:text-primary">
+                                  <span className="sr-only">Download Invoice</span>
+                                  <DownloadIcon />
+                                </button>
+                              </div></TableCell>
             </TableRow>
           ))}
         </TableBody>
